@@ -65,6 +65,8 @@ class RemoteController extends Controller {
 
 
 	/**
+	 * endpoint that will receive mail content from NextcloudMailCatcher.php
+	 *
 	 * @NoAdminRequired
 	 * @NoCSRFRequired
 	 *

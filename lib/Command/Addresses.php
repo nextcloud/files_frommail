@@ -54,6 +54,15 @@ class Addresses extends Base {
 	}
 
 
+	/**
+	 * ./occ files_frommail:address to manage the mail address to get caught by the app.
+	 *
+	 * ./occ files_frommail:address --list
+	 * ./occ files_frommail:address --add mail_address
+	 * ./occ files_frommail:address --remove mail_address
+	 * ./occ files_frommail:address --password mail_address password
+	 *
+	 */
 	protected function configure() {
 		parent::configure();
 		$this->setName('files_frommail:address')
@@ -64,11 +73,18 @@ class Addresses extends Base {
 			 ->addOption(
 				 'password', 'p', InputOption::VALUE_NONE, 'add a password to protect a mail address'
 			 )
-			 ->addArgument('address', InputArgument::OPTIONAL, 'email address')
+			 ->addArgument('address', InputArgument::OPTIONAL, 'mail address')
 			 ->addArgument('password', InputArgument::OPTIONAL, 'password');
 	}
 
 
+	/**
+	 * @param InputInterface $input
+	 * @param OutputInterface $output
+	 *
+	 * @return int|null|void
+	 * @throws Exception
+	 */
 	protected function execute(InputInterface $input, OutputInterface $output) {
 
 		try {

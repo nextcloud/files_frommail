@@ -38,6 +38,7 @@ use OCP\Files\Folder;
 use PhpMimeMailParser\Attachment;
 use PhpMimeMailParser\Parser;
 
+
 class MailService {
 
 
@@ -63,6 +64,15 @@ class MailService {
 
 
 	/**
+	 * parse the mail content.
+	 *
+	 * will create a local text file containing the headers and the content of the mail for each one of
+	 * the 'to' or 'cc' mail address correspond to a mail added using the
+	 * "./occ files_frommail:address --add"
+	 *
+	 * Attachments will also be saved on the cloud in the path:
+	 * "Mails sent to yourmail@example.net/From author@example.com/"
+	 *
 	 * @param string $content
 	 * @param string $userId
 	 */
@@ -74,18 +84,20 @@ class MailService {
 		$data['date'] = date('Y-m-d H:i:s');
 		$data['userId'] = $userId;
 
-		$toAddresses = array_merge(
-			$mail->getAddresses('to'),
-			$mail->getAddresses('cc'),
-			$mail->getAddresses('bcc')
-		);
-
+		$done = [];
+		$toAddresses = array_merge($mail->getAddresses('to'), $mail->getAddresses('cc'));
 		foreach ($toAddresses as $toAddress) {
-			try {
-				$this->generateLocalContentFromMail($mail, $toAddress['address'], $data);
-			} catch (Exception $e) {
-				// we check next address
+			$to = $toAddress['address'];
+			if (in_array($to, $done)) {
+				continue;
 			}
+
+			try {
+				$this->generateLocalContentFromMail($mail, $to, $data);
+			} catch (Exception $e) {
+			}
+
+			$done[] = $to;
 		}
 	}
 
@@ -106,6 +118,7 @@ class MailService {
 
 		$this->verifyInfoAndPassword($text, $toInfo);
 
+		$this->count = 0;
 		$folder = $this->getMailFolder($userId, $to, $from);
 		$this->createLocalFile($folder, $date, 'mail-' . $subject . '.txt', $text);
 		$this->createLocalFileFromAttachments($date, $folder, $mail->getAttachments());

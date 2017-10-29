@@ -18,6 +18,9 @@
 		<admin>https://github.com/daita/files_frommail/wiki</admin>
 	</documentation>
 	<category>tools</category>
+	<category>files</category>
+	<category>social</category>
+
 	<website>https://github.com/daita/files_frommail</website>
 	<bugs>https://github.com/daita/files_frommail/issues</bugs>
 	<repository>https://github.com/daita/files_frommail.git</repository>
