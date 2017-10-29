@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<info xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	  xsi:noNamespaceSchemaLocation="https://apps.nextcloud.com/schema/apps/info.xsd">
+	<id>files_frommail</id>
+	<name>Files From Mail</name>
+	<summary>Recover your email attachments from your cloud</summary>
+	<description><![CDATA[
+
+	Recover your email attachments from your cloud
+
+]]>
+	</description>
+	<version>0.1.0</version>
+	<licence>agpl</licence>
+	<author>Maxence Lange</author>
+	<namespace>Files_FromMail</namespace>
+	<documentation>
+		<admin>https://github.com/daita/files_frommail/wiki</admin>
+	</documentation>
+	<category>tools</category>
+	<website>https://github.com/daita/files_frommail</website>
+	<bugs>https://github.com/daita/files_frommail/issues</bugs>
+	<repository>https://github.com/daita/files_frommail.git</repository>
+	<!--<screenshot>-->
+	<!--</screenshot>-->
+
+	<dependencies>
+		<nextcloud min-version="12" max-version="13"/>
+	</dependencies>
+
+	<commands>
+		<command>OCA\Files_FromMail\Command\Addresses</command>
+	</commands>
+
+</info>

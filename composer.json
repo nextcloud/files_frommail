@@ -1,0 +1,15 @@
+{
+  "name": "nextcloud/files_frommail",
+  "description": "Files From Mail",
+  "minimum-stability": "stable",
+  "license": "proprietary",
+  "authors": [
+    {
+      "name": "Maxence Lange",
+      "email": "maxence@artificial-owl.com"
+    }
+  ],
+  "require": {
+    "php-mime-mail-parser/php-mime-mail-parser": "2.9.2"
+  }
+}
