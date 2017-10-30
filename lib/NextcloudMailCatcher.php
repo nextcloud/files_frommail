@@ -26,7 +26,7 @@
 
 
 $config = [
-	'nextcloud' => 'https://test.artificial-owl.com/',
+	'nextcloud' => 'https://cloud.example.net/',
 	'username'  => 'frommail',
 	'password'  => 'Ledxc-jRFiR-wBMXD-jyyjt-Y87CZ',
 	'debug'     => false

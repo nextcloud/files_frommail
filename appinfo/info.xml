@@ -6,7 +6,8 @@
 	<summary>Recover your email attachments from your cloud</summary>
 	<description><![CDATA[
 
-	Recover your email attachments from your cloud
+		Allows an admin to link a drop-mailbox to Nextcloud.
+		This way, you can set a mail address and every mails+attachments send to this mail address will be automatically be saved on the cloud.
 
 ]]>
 	</description>
@@ -15,17 +16,16 @@
 	<author>Maxence Lange</author>
 	<namespace>Files_FromMail</namespace>
 	<documentation>
-		<admin>https://github.com/daita/files_frommail/wiki</admin>
+		<admin>https://github.com/nextcloud/files_frommail/blob/master/README.md</admin>
 	</documentation>
 	<category>tools</category>
 	<category>files</category>
 	<category>social</category>
 
-	<website>https://github.com/daita/files_frommail</website>
-	<bugs>https://github.com/daita/files_frommail/issues</bugs>
-	<repository>https://github.com/daita/files_frommail.git</repository>
-	<!--<screenshot>-->
-	<!--</screenshot>-->
+	<website>https://github.com/nextcloud/files_frommail</website>
+	<bugs>https://github.com/nextcloud/files_frommail/issues</bugs>
+	<repository>https://github.com/nextcloud/files_frommail.git</repository>
+	<screenshot>https://raw.githubusercontent.com/nextcloud/files_frommail/master/screenshots/v0.1.0.png</screenshot>
 
 	<dependencies>
 		<nextcloud min-version="12" max-version="13"/>
