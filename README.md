@@ -1,5 +1,7 @@
 ### files_frommail
 
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/nextcloud/files_frommail/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/nextcloud/files_frommail/?branch=master)
+
 **Files From Mail** allow an admin to link a drop-mailbox to Nextcloud.   
 This way, you can set a mail address (_files@example.net_ in our example) and every mails+attachments send to this mail address will be automatically be saved on the cloud.
 
