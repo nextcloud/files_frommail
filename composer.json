@@ -10,6 +10,6 @@
     }
   ],
   "require": {
-    "php-mime-mail-parser/php-mime-mail-parser": "2.9.2"
+    "php-mime-mail-parser/php-mime-mail-parser": "4.0.3"
   }
 }
