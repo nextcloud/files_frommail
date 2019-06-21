@@ -50,7 +50,9 @@ $ sudo apachectl restart
 You now need to tell your mail server that any mails coming to a specific address (in our example: _files@mailserver.example.net_) will be redirected to a PHP script:
 Add this line to **/etc/aliases**:
 
->     files: "|/usr/bin/php -f /path/to/NextcloudMailCatcher.php"
+>     files: "|/path/to/NextcloudMailCatcher.php"
+
+Make sure to make the script executable with `chmod +x path/to/NextcloudMailCatcher.php`.
 
 _The NextcloudMailCatcher.php can be find in the /lib/ folder of the apps. The script is independant of the rest of the app and can be copied alone on your mail server_  
 
