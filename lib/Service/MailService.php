@@ -81,7 +81,7 @@ class MailService {
 		$mail->setText($content);
 
 		$data = $this->parseMailHeaders($mail);
-		$data['id'] = date('YmdHis');
+		$data['id'] = date($this->configService->getAppValue(ConfigService::FROMMAIL_FILENAMEID));
 		$data['userId'] = $userId;
 
 		$done = [];

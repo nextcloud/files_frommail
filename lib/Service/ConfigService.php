@@ -32,9 +32,11 @@ use OCP\IRequest;
 class ConfigService {
 
 	const FROMMAIL_ADDRESSES = 'frommail_addresses';
+	const FROMMAIL_FILENAMEID = 'frommail_filenameid';
 
 	private $defaults = [
-		self::FROMMAIL_ADDRESSES => ''
+		self::FROMMAIL_ADDRESSES => '',
+		self::FROMMAIL_FILENAMEID => 'YmdHis',
 	];
 
 	/** @var string */
