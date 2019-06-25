@@ -2,3 +2,5 @@
 \.idea/
 
 vendor/
+/nbproject/private/
+project.*
