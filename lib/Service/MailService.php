@@ -81,7 +81,7 @@ class MailService {
 		$mail->setText($content);
 
 		$data = $this->parseMailHeaders($mail);
-		$data['date'] = date('Y-m-d H:i:s');
+		$data['id'] = date($this->configService->getAppValue(ConfigService::FROMMAIL_FILENAMEID));
 		$data['userId'] = $userId;
 
 		$done = [];
@@ -114,14 +114,14 @@ class MailService {
 		$subject = $data['subject'];
 		$from = $data['from'];
 		$userId = $data['userId'];
-		$date = $data['date'];
+		$id = $data['id'];
 
 		$this->verifyInfoAndPassword($text, $toInfo);
 
 		$this->count = 0;
 		$folder = $this->getMailFolder($userId, $to, $from);
-		$this->createLocalFile($folder, $date, 'mail-' . $subject . '.txt', $text);
-		$this->createLocalFileFromAttachments($date, $folder, $mail->getAttachments());
+		$this->createLocalFile($folder, $id, 'mail-' . $subject . '.txt', $text);
+		$this->createLocalFileFromAttachments($id, $folder, $mail->getAttachments());
 	}
 
 

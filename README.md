@@ -91,4 +91,10 @@ You can choose to secure the mails and ask for a password:
 
 Doing so, only mails containing '**:your_password**' in their content will be saved.
 
+### Changing the generated filename id
 
+By default the generated files start with an identifier in the format *'Y-m-d H:i:s'*. This identifier can be changed using 
+
+>     ./occ config:app:set --value <NEW FORMAT> files_frommail filename_id
+  
+The `<NEW FORMAT>` value is a string using PHP [`date()`](https://www.php.net/manual/en/function.date.php) format.
