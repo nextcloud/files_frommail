@@ -36,7 +36,7 @@ class ConfigService {
 
 	private $defaults = [
 		self::FROMMAIL_ADDRESSES => '',
-		self::FROMMAIL_FILENAMEID => 'YmdHis',
+		self::FROMMAIL_FILENAMEID => 'Y-m-d H:i:s',
 	];
 
 	/** @var string */
