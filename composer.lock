@@ -1,38 +1,38 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "766789d2d56090178ef7dc3605fc278d",
+    "content-hash": "cbc2c3983e8b638140ab5543d686a55c",
     "packages": [
         {
             "name": "php-mime-mail-parser/php-mime-mail-parser",
-            "version": "3.0.4",
+            "version": "5.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-mime-mail-parser/php-mime-mail-parser.git",
-                "reference": "b1319a9899dd6f27edf425ef1e90cb6c1d7d2a0d"
+                "reference": "adb0ed13f86d72468c5608ce28ec7d4c42ef8e99"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-mime-mail-parser/php-mime-mail-parser/zipball/b1319a9899dd6f27edf425ef1e90cb6c1d7d2a0d",
-                "reference": "b1319a9899dd6f27edf425ef1e90cb6c1d7d2a0d",
+                "url": "https://api.github.com/repos/php-mime-mail-parser/php-mime-mail-parser/zipball/adb0ed13f86d72468c5608ce28ec7d4c42ef8e99",
+                "reference": "adb0ed13f86d72468c5608ce28ec7d4c42ef8e99",
                 "shasum": ""
             },
             "require": {
                 "ext-mailparse": "*",
-                "php": "^5.6.0 || ^7.0"
+                "php": "^7.1"
             },
             "replace": {
                 "exorus/php-mime-mail-parser": "*",
                 "messaged/php-mime-mail-parser": "*"
             },
             "require-dev": {
-                "php-coveralls/php-coveralls": "0.*",
-                "phpunit/php-token-stream": "^1.3.0",
-                "phpunit/phpunit": "^5.7",
-                "squizlabs/php_codesniffer": "2.*"
+                "php-coveralls/php-coveralls": "^2.1",
+                "phpunit/php-token-stream": "^3.0",
+                "phpunit/phpunit": "^7.0",
+                "squizlabs/php_codesniffer": "^3.4"
             },
             "type": "library",
             "autoload": {
@@ -76,15 +76,17 @@
                     "role": "Developer"
                 }
             ],
-            "description": "Fully Tested Mailparse Extension Wrapper for PHP 5.6+",
+            "description": "A fully tested email parser for PHP 7.1+ (mailparse extension wrapper).",
             "homepage": "https://github.com/php-mime-mail-parser/php-mime-mail-parser",
             "keywords": [
                 "MimeMailParser",
                 "mail",
                 "mailparse",
-                "mime"
+                "mime",
+                "parser",
+                "php"
             ],
-            "time": "2019-03-19T05:24:58+00:00"
+            "time": "2019-06-06T05:16:32+00:00"
         }
     ],
     "packages-dev": [],
