@@ -69,7 +69,12 @@ _Edit **NextcloudMailCatcher.php** and edit the few settings:
 >       'debug'     => false
 >     ];
 
-if **debug** is set to _true_, a log can be find in _/tmp/NextcloudMailParser.log_
+
+You can test your setup by running:
+
+>     $ php -f ./NextcloudMailCatcher.php test
+
+
 
 ### Virtual domain
 
