@@ -35,6 +35,9 @@ use OCA\Files_FromMail\Exceptions\NotAFolderException;
 use OCA\Files_FromMail\Exceptions\UnknownAddressException;
 use OCP\Files\FileInfo;
 use OCP\Files\Folder;
+use OCP\Files\GenericFileException;
+use OCP\Files\NotFoundException;
+use OCP\Files\NotPermittedException;
 use PhpMimeMailParser\Attachment;
 use PhpMimeMailParser\Parser;
 
@@ -95,6 +98,7 @@ class MailService {
 			try {
 				$this->generateLocalContentFromMail($mail, $to, $data);
 			} catch (Exception $e) {
+				$this->miscService->log('could not generate LocalContent from Mail - ' . $e->getMessage());
 			}
 
 			$done[] = $to;
@@ -106,6 +110,12 @@ class MailService {
 	 * @param Parser $mail
 	 * @param string $to
 	 * @param array $data
+	 *
+	 * @throws AddressInfoException
+	 * @throws GenericFileException
+	 * @throws NotAFolderException
+	 * @throws NotFoundException
+	 * @throws NotPermittedException
 	 */
 	private function generateLocalContentFromMail(Parser $mail, $to, $data) {
 
@@ -156,6 +166,8 @@ class MailService {
 	 *
 	 * @return Folder
 	 * @throws NotAFolderException
+	 * @throws NotFoundException
+	 * @throws NotPermittedException
 	 */
 	private function getMailFolder($userId, $to, $from) {
 
@@ -199,6 +211,9 @@ class MailService {
 	 * @param string $id
 	 * @param Folder $folder
 	 * @param Attachment[] $attachments
+	 *
+	 * @throws GenericFileException
+	 * @throws NotPermittedException
 	 */
 	private function createLocalFileFromAttachments($id, $folder, $attachments) {
 		foreach ($attachments as $attachment) {
@@ -216,6 +231,9 @@ class MailService {
 	 * @param string $id
 	 * @param string $filename
 	 * @param string $content
+	 *
+	 * @throws NotPermittedException
+	 * @throws GenericFileException
 	 */
 	private function createLocalFile($folder, $id, $filename, $content) {
 		$new = $folder->newFile($id . '-' . $this->count . '_' . $filename);
@@ -278,6 +296,7 @@ class MailService {
 	 * @param $address
 	 *
 	 * @throws AddressAlreadyExistException
+	 * @throws InvalidAddressException
 	 */
 	public function addMailAddress($address) {
 		$this->hasToBeAValidMailAddress($address);

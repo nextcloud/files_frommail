@@ -37,6 +37,7 @@ $config = [
 
 class NextcloudMailCatcher {
 
+
 	/** @var string */
 	private $content;
 
@@ -50,15 +51,12 @@ class NextcloudMailCatcher {
 	 * @param array $config
 	 */
 	public function __construct($config) {
-
 		$nextcloud = $config['nextcloud'];
 		if (substr($nextcloud, -1) === '/') {
 			$config['nextcloud'] = substr($nextcloud, 0, -1);
 		}
 
-
 		$this->config = $config;
-		$this->debug('Catching a new mail');
 	}
 
 
@@ -89,10 +87,34 @@ class NextcloudMailCatcher {
 
 		$content = rawurlencode(base64_encode($this->getContent()));
 
-		$curl = $this->generateAuthedCurl(
-			$this->config['nextcloud'] . '/index.php/apps/files_frommail/remote/'
-		);
+		$curl = $this->generateAuthedCurl();
 		$this->fillCurlWithContent($curl, 'content=' . $content);
+
+		$result = curl_exec($curl);
+
+		$this->debugCurl($curl, $result);
+	}
+
+
+	/**
+	 *
+	 */
+	public function test() {
+		$this->config['debug'] = true;
+		$this->debug('testing!');
+
+		$pwd = $this->config['password'];
+		if (substr($pwd, 5, 1) !== '-') {
+			$this->debug('');
+			$this->debug('Error: password have to be a generated token');
+			$this->debug(
+				'Generate a token on the webclient: Settings / Security / Devices & session'
+			);
+			exit();
+		}
+
+		$curl = $this->generateAuthedCurl();
+		$this->fillCurlWithContent($curl, 'content=null');
 
 		$result = curl_exec($curl);
 
@@ -123,6 +145,11 @@ class NextcloudMailCatcher {
 	}
 
 
+	/**
+	 * @param $curl
+	 *
+	 * @throws Exception
+	 */
 	private function debugCurlResponseCode($curl) {
 
 		$code = curl_getinfo($curl, CURLINFO_HTTP_CODE);
@@ -147,13 +174,13 @@ class NextcloudMailCatcher {
 
 
 	/**
-	 * @param $url
-	 *
 	 * @return resource
 	 */
-	private function generateAuthedCurl($url) {
+	private function generateAuthedCurl() {
 
+		$url = $this->config['nextcloud'] . '/index.php/apps/files_frommail/remote';
 		$curl = curl_init($url);
+
 		curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
 		curl_setopt($curl, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
 		curl_setopt(
@@ -162,7 +189,8 @@ class NextcloudMailCatcher {
 		);
 
 		$this->debug(
-			'Generate curl request to ' . $url . ' with username \'' . $this->config['username'] . '\''
+			'Generate curl request to ' . $url . ' with username \'' . $this->config['username']
+			. '\''
 		);
 
 		return $curl;
@@ -200,12 +228,23 @@ class NextcloudMailCatcher {
 			return;
 		}
 
-		$log = '/tmp/' . basename(__FILE__, '.php') . '.log';
-		file_put_contents($log, date('Y-m-d H:i:s') . ' ' . $string . "\n", FILE_APPEND);
+		echo $string . "\n";
+//		$log = '/tmp/' . basename(__FILE__, '.php') . '.log';
+//		file_put_contents($log, date('Y-m-d H:i:s') . ' ' . $string . "\n", FILE_APPEND);
 	}
 
 }
 
+
+$mailCatcher = new NextcloudMailCatcher($config);
+
+if (sizeof($argv) === 2 && $argv[1] === 'test') {
+	$mailCatcher->test();
+
+	return;
+}
+
+echo 'Catching a new mail';
 
 $content = '';
 $fd = fopen('php://stdin', 'r');
@@ -213,7 +252,6 @@ while (!feof($fd)) {
 	$content .= fread($fd, 1024);
 }
 
-$mailCatcher = new NextcloudMailCatcher($config);
 $mailCatcher->setContent($content);
 $mailCatcher->sendToNextcloud();
 

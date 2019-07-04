@@ -28,8 +28,11 @@ namespace OCA\Files_FromMail\Command;
 
 use Exception;
 use OC\Core\Command\Base;
+use OCA\Files_FromMail\Exceptions\AddressAlreadyExistException;
 use OCA\Files_FromMail\Exceptions\FakeException;
+use OCA\Files_FromMail\Exceptions\InvalidAddressException;
 use OCA\Files_FromMail\Exceptions\MissingArgumentException;
+use OCA\Files_FromMail\Exceptions\UnknownAddressException;
 use OCA\Files_FromMail\Service\MailService;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -131,6 +134,9 @@ class Addresses extends Base {
 	 * @param InputInterface $input
 	 *
 	 * @throws FakeException
+	 * @throws MissingArgumentException
+	 * @throws AddressAlreadyExistException
+	 * @throws InvalidAddressException
 	 */
 	private function addMailAddress(InputInterface $input) {
 		if ($input->getOption('add') !== true) {
@@ -148,6 +154,8 @@ class Addresses extends Base {
 	 * @param InputInterface $input
 	 *
 	 * @throws FakeException
+	 * @throws MissingArgumentException
+	 * @throws UnknownAddressException
 	 */
 	private function removeMailAddress(InputInterface $input) {
 		if ($input->getOption('remove') !== true) {
@@ -166,6 +174,8 @@ class Addresses extends Base {
 	 * @param OutputInterface $output
 	 *
 	 * @throws FakeException
+	 * @throws MissingArgumentException
+	 * @throws UnknownAddressException
 	 */
 	private function setMailAddressPassword(InputInterface $input, OutputInterface $output) {
 		if ($input->getOption('password') !== true) {
@@ -186,6 +196,12 @@ class Addresses extends Base {
 	}
 
 
+	/**
+	 * @param InputInterface $input
+	 *
+	 * @return string|string[]|null
+	 * @throws MissingArgumentException
+	 */
 	private function checkMailAddress(InputInterface $input) {
 		$mail = $input->getArgument('address');
 		if ($mail === null) {

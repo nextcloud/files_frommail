@@ -11,7 +11,7 @@
 
 ]]>
 	</description>
-	<version>0.2.0</version>
+	<version>0.3.0</version>
 	<licence>agpl</licence>
 	<author>Maxence Lange</author>
 	<namespace>Files_FromMail</namespace>
@@ -20,7 +20,6 @@
 	</documentation>
 	<category>tools</category>
 	<category>files</category>
-	<category>social</category>
 
 	<website>https://github.com/nextcloud/files_frommail</website>
 	<bugs>https://github.com/nextcloud/files_frommail/issues</bugs>
@@ -28,7 +27,7 @@
 	<screenshot>https://raw.githubusercontent.com/nextcloud/files_frommail/master/screenshots/v0.1.0.png</screenshot>
 
 	<dependencies>
-		<nextcloud min-version="12" max-version="16"/>
+		<nextcloud min-version="15" max-version="17"/>
 	</dependencies>
 
 	<commands>

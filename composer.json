@@ -2,7 +2,7 @@
   "name": "nextcloud/files_frommail",
   "description": "Files From Mail",
   "minimum-stability": "stable",
-  "license": "proprietary",
+  "license": "agpl",
   "authors": [
     {
       "name": "Maxence Lange",
@@ -10,6 +10,6 @@
     }
   ],
   "require": {
-    "php-mime-mail-parser/php-mime-mail-parser": "2.9.2"
+    "php-mime-mail-parser/php-mime-mail-parser": "3.0.4"
   }
 }

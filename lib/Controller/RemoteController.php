@@ -26,6 +26,7 @@
 
 namespace OCA\Files_FromMail\Controller;
 
+use Exception;
 use OCA\Files_FromMail\AppInfo\Application;
 use OCA\Files_FromMail\Service\MailService;
 use OCA\Files_FromMail\Service\MiscService;
@@ -54,7 +55,8 @@ class RemoteController extends Controller {
 	 * @param MailService $mailService
 	 * @param MiscService $miscService
 	 */
-	function __construct(IRequest $request, $userId, MailService $mailService, MiscService $miscService
+	function __construct(
+		IRequest $request, $userId, MailService $mailService, MiscService $miscService
 	) {
 		parent::__construct(Application::APP_NAME, $request);
 		$this->userId = $userId;
@@ -75,10 +77,19 @@ class RemoteController extends Controller {
 	 * @return DataResponse
 	 */
 	public function getContent($content) {
-		$content = base64_decode(rawurldecode($content));
-		$this->mailService->parseMail($content, $this->userId);
 
-		return new DataResponse(['ok'], Http::STATUS_CREATED);
+		try {
+			if ($content !== 'null') {
+				$content = base64_decode(rawurldecode($content));
+				$this->mailService->parseMail($content, $this->userId);
+			}
+
+			return new DataResponse(['ok'], Http::STATUS_CREATED);
+		} catch (Exception $e) {
+			$this->miscService->log('issue while getContent() : ' . $e->getMessage());
+
+			return new DataResponse(['error' => $e->getMessage()], Http::STATUS_CREATED);
+		}
 	}
 
 

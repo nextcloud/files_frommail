@@ -26,8 +26,6 @@
 
 return [
 	'routes' => [
-		['name' => 'Remote#getContent', 'url' => '/remote/', 'verb' => 'PUT']
+		['name' => 'Remote#getContent', 'url' => '/remote', 'verb' => 'PUT']
 	]
 ];
-
-
