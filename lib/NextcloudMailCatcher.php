@@ -1,3 +1,4 @@
+#!/usr/bin/env php
 <?php
 /**
  * Files_FromMail - Recover your email attachments from your cloud.
