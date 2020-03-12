@@ -27,7 +27,7 @@
 	<screenshot>https://raw.githubusercontent.com/nextcloud/files_frommail/master/screenshots/v0.1.0.png</screenshot>
 
 	<dependencies>
-		<nextcloud min-version="18"/>
+		<nextcloud min-version="18" max-version="19"/>
 	</dependencies>
 
 	<settings>
