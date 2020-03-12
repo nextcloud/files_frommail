@@ -1,4 +1,6 @@
-<?php
+<?php declare(strict_types=1);
+
+
 /**
  * Files_FromMail - Recover your email attachments from your cloud.
  *
@@ -24,6 +26,7 @@
  *
  */
 
+
 namespace OCA\Files_FromMail\Command;
 
 use Exception;
@@ -39,6 +42,12 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
+
+/**
+ * Class Addresses
+ *
+ * @package OCA\Files_FromMail\Command
+ */
 class Addresses extends Base {
 
 
@@ -77,7 +86,7 @@ class Addresses extends Base {
 				 'password', 'p', InputOption::VALUE_NONE, 'add a password to protect a mail address'
 			 )
 			 ->addArgument('address', InputArgument::OPTIONAL, 'mail address')
-			 ->addArgument('password', InputArgument::OPTIONAL, 'password');
+			 ->addArgument('password', InputArgument::OPTIONAL, 'password', '');
 	}
 
 
@@ -85,10 +94,10 @@ class Addresses extends Base {
 	 * @param InputInterface $input
 	 * @param OutputInterface $output
 	 *
-	 * @return int|null|void
+	 * @return int
 	 * @throws Exception
 	 */
-	protected function execute(InputInterface $input, OutputInterface $output) {
+	protected function execute(InputInterface $input, OutputInterface $output): int {
 
 		try {
 			$this->listMailAddresses($input, $output);
@@ -101,6 +110,8 @@ class Addresses extends Base {
 		} catch (Exception $e) {
 			throw $e;
 		}
+
+		return 0;
 	}
 
 
@@ -110,7 +121,7 @@ class Addresses extends Base {
 	 *
 	 * @throws FakeException
 	 */
-	private function listMailAddresses(InputInterface $input, OutputInterface $output) {
+	private function listMailAddresses(InputInterface $input, OutputInterface $output): void {
 		if ($input->getOption('list') !== true) {
 			return;
 		}
@@ -138,7 +149,7 @@ class Addresses extends Base {
 	 * @throws AddressAlreadyExistException
 	 * @throws InvalidAddressException
 	 */
-	private function addMailAddress(InputInterface $input) {
+	private function addMailAddress(InputInterface $input): void {
 		if ($input->getOption('add') !== true) {
 			return;
 		}
@@ -157,7 +168,7 @@ class Addresses extends Base {
 	 * @throws MissingArgumentException
 	 * @throws UnknownAddressException
 	 */
-	private function removeMailAddress(InputInterface $input) {
+	private function removeMailAddress(InputInterface $input): void {
 		if ($input->getOption('remove') !== true) {
 			return;
 		}
@@ -177,7 +188,7 @@ class Addresses extends Base {
 	 * @throws MissingArgumentException
 	 * @throws UnknownAddressException
 	 */
-	private function setMailAddressPassword(InputInterface $input, OutputInterface $output) {
+	private function setMailAddressPassword(InputInterface $input, OutputInterface $output): void {
 		if ($input->getOption('password') !== true) {
 			return;
 		}
@@ -186,7 +197,7 @@ class Addresses extends Base {
 		$password = $input->getArgument('password');
 		$this->mailService->setMailPassword($mail, $password);
 
-		if ($password === null) {
+		if ($password === '') {
 			$output->writeln('Password for ' . $mail . ' is now UNSET');
 			throw new FakeException();
 		}
@@ -199,17 +210,16 @@ class Addresses extends Base {
 	/**
 	 * @param InputInterface $input
 	 *
-	 * @return string|string[]|null
+	 * @return string
 	 * @throws MissingArgumentException
 	 */
-	private function checkMailAddress(InputInterface $input) {
+	private function checkMailAddress(InputInterface $input): string {
 		$mail = $input->getArgument('address');
 		if ($mail === null) {
 			throw new MissingArgumentException('missing email address');
 		}
 
 		return $mail;
-
 	}
 
 
@@ -218,7 +228,7 @@ class Addresses extends Base {
 	 *
 	 * @return string
 	 */
-	private function formatMailAddress($entry) {
+	private function formatMailAddress($entry): string {
 		$line = '- ' . $entry['address'];
 		if (array_key_exists('password', $entry) && $entry['password'] !== '') {
 			$line .= ' [:' . $entry['password'] . ']';

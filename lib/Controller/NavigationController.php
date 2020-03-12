@@ -40,14 +40,12 @@ use OCP\IRequest;
 
 
 /**
- * Class RemoteController
+ * Class NavigationController
  *
  * @package OCA\Files_FromMail\Controller
  */
-class RemoteController extends Controller {
+class NavigationController extends Controller {
 
-	/** @var string */
-	private $userId;
 
 	/** @var MailService */
 	private $mailService;
@@ -64,9 +62,8 @@ class RemoteController extends Controller {
 	 * @param MailService $mailService
 	 * @param MiscService $miscService
 	 */
-	function __construct(IRequest $request, $userId, MailService $mailService, MiscService $miscService) {
+	function __construct(IRequest $request, MailService $mailService, MiscService $miscService) {
 		parent::__construct(Application::APP_NAME, $request);
-		$this->userId = $userId;
 
 		$this->mailService = $mailService;
 		$this->miscService = $miscService;
@@ -74,29 +71,51 @@ class RemoteController extends Controller {
 
 
 	/**
-	 * endpoint that will receive mail content from NextcloudMailCatcher.php
-	 *
-	 * @NoAdminRequired
-	 * @NoCSRFRequired
-	 *
-	 * @param $content
+	 * @return DataResponse
+	 */
+	public function getMailbox(): DataResponse {
+		try {
+			$mailbox = $this->mailService->getMailAddresses();
+
+			return new DataResponse($mailbox, Http::STATUS_CREATED);
+		} catch (Exception $e) {
+			return new DataResponse(['error' => $e->getMessage()], Http::STATUS_BAD_REQUEST);
+		}
+	}
+
+
+	/**
+	 * @param string $address
+	 * @param string $password
 	 *
 	 * @return DataResponse
 	 */
-	public function getContent($content): DataResponse {
+	public function newMailbox(string $address, string $password): DataResponse {
 		try {
-			if ($content !== 'null') {
-				$content = base64_decode(rawurldecode($content));
-				$this->mailService->parseMail($content, $this->userId);
-			}
+			$this->mailService->addMailAddress($address, $password);
 
 			return new DataResponse(['ok'], Http::STATUS_CREATED);
 		} catch (Exception $e) {
-			$this->miscService->log('issue while getContent() : ' . $e->getMessage());
-
-			return new DataResponse(['error' => $e->getMessage()], Http::STATUS_CREATED);
+			return new DataResponse(['error' => $e->getMessage()], Http::STATUS_BAD_REQUEST);
 		}
 	}
+
+
+	/**
+	 * @param string $address
+	 *
+	 * @return DataResponse
+	 */
+	public function deleteMailbox(string $address): DataResponse {
+		try {
+			$this->mailService->removeMailAddress($address);
+
+			return new DataResponse(['ok'], Http::STATUS_CREATED);
+		} catch (Exception $e) {
+			return new DataResponse(['error' => $e->getMessage()], Http::STATUS_BAD_REQUEST);
+		}
+	}
+
 
 }
 

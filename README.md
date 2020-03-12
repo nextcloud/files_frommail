@@ -38,8 +38,8 @@ remove lines 34-37:
 $ ./configure --with-php-config=/usr/bin/php-config
 $ make
 $ sudo make install
-$ sudo echo "extension=mailparse.so" > /etc/php/7.0/mods-available/mailparse.ini
-$ sudo ln -s /etc/php/7.0/mods-available/mailparse.ini /etc/php/7.0/apache2/conf.d/20-mailparse.ini
+$ sudo echo "extension=mailparse.so" > /etc/php/7.3/mods-available/mailparse.ini
+$ sudo ln -s /etc/php/7.3/mods-available/mailparse.ini /etc/php/7.3/apache2/conf.d/20-mailparse.ini
 $ sudo apachectl restart
 ```
 
@@ -59,7 +59,7 @@ Recreate the aliases db:
 $ sudo newaliases
 ```
 
-_Edit **NextcloudMailCatcher.php** and edit the few settings:
+Edit **NextcloudMailCatcher.php** and edit the few settings:
 
 
 >     $config = [
@@ -69,6 +69,7 @@ _Edit **NextcloudMailCatcher.php** and edit the few settings:
 >       'debug'     => false
 >     ];
 
+_Note: the password needs to be a token generated from the webclient in **Settings** / **Security** / **Devices & session**_
 
 You can test your setup by running:
 

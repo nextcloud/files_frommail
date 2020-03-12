@@ -1,4 +1,6 @@
-<?php
+<?php declare(strict_types=1);
+
+
 /**
  * Files_FromMail - Recover your email attachments from your cloud.
  *
@@ -24,20 +26,28 @@
  *
  */
 
+
 namespace OCA\Files_FromMail\Service;
 
 use OCP\IConfig;
 use OCP\IRequest;
 
+
+/**
+ * Class ConfigService
+ *
+ * @package OCA\Files_FromMail\Service
+ */
 class ConfigService {
 
 	const FROMMAIL_ADDRESSES = 'frommail_addresses';
 	const FROMMAIL_FILENAMEID = 'filename_id';
 
 	private $defaults = [
-		self::FROMMAIL_ADDRESSES => '',
+		self::FROMMAIL_ADDRESSES  => '',
 		self::FROMMAIL_FILENAMEID => 'Y-m-d H:i:s',
 	];
+
 
 	/** @var string */
 	private $appName;
@@ -53,6 +63,7 @@ class ConfigService {
 
 	/** @var MiscService */
 	private $miscService;
+
 
 	/**
 	 * ConfigService constructor.
@@ -81,7 +92,7 @@ class ConfigService {
 	 *
 	 * @return string
 	 */
-	public function getAppValue($key) {
+	public function getAppValue(string $key): string {
 		$defaultValue = null;
 
 		if (array_key_exists($key, $this->defaults)) {
@@ -97,10 +108,8 @@ class ConfigService {
 	 *
 	 * @param string $key
 	 * @param string $value
-	 *
-	 * @return void
 	 */
-	public function setAppValue($key, $value) {
+	public function setAppValue(string $key, string $value): void {
 		$this->config->setAppValue($this->appName, $key, $value);
 	}
 
@@ -112,8 +121,9 @@ class ConfigService {
 	 *
 	 * @return string
 	 */
-	public function deleteAppValue($key) {
+	public function deleteAppValue(string $key): string {
 		return $this->config->deleteAppValue($this->appName, $key);
 	}
 
 }
+

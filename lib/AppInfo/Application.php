@@ -1,4 +1,6 @@
-<?php
+<?php declare(strict_types=1);
+
+
 /**
  * Files_FromMail - Recover your email attachments from your cloud.
  *
@@ -24,13 +26,22 @@
  *
  */
 
+
 namespace OCA\Files_FromMail\AppInfo;
 
 use OCP\AppFramework\App;
 
+
+/**
+ * Class Application
+ *
+ * @package OCA\Files_FromMail\AppInfo
+ */
 class Application extends App {
 
+
 	const APP_NAME = 'files_frommail';
+
 
 	/**
 	 * @param array $params

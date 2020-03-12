@@ -1,4 +1,6 @@
-<?php
+<?php declare(strict_types=1);
+
+
 /**
  * Files_FromMail - Recover your email attachments from your cloud.
  *
@@ -24,8 +26,13 @@
  *
  */
 
+
 return [
 	'routes' => [
-		['name' => 'Remote#getContent', 'url' => '/remote', 'verb' => 'PUT']
+		['name' => 'Remote#getContent', 'url' => '/remote', 'verb' => 'PUT'],
+		['name' => 'Navigation#getMailbox', 'url' => '/admin/mailbox', 'verb' => 'GET'],
+		['name' => 'Navigation#newMailbox', 'url' => '/admin/mailbox', 'verb' => 'POST'],
+		['name' => 'Navigation#deleteMailbox', 'url' => '/admin/mailbox', 'verb' => 'DELETE']
 	]
 ];
+

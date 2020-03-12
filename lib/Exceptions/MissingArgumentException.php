@@ -1,4 +1,6 @@
-<?php
+<?php declare(strict_types=1);
+
+
 /**
  * Files_FromMail - Recover your email attachments from your cloud.
  *
@@ -26,7 +28,10 @@
 
 namespace OCA\Files_FromMail\Exceptions;
 
-class MissingArgumentException extends \Exception {
+use Exception;
+
+
+class MissingArgumentException extends Exception {
 
 }
 

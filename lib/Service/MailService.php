@@ -1,4 +1,6 @@
-<?php
+<?php declare(strict_types=1);
+
+
 /**
  * Files_FromMail - Recover your email attachments from your cloud.
  *
@@ -24,10 +26,12 @@
  *
  */
 
+
 namespace OCA\Files_FromMail\Service;
 
 
 use Exception;
+use OC;
 use OCA\Files_FromMail\Exceptions\AddressAlreadyExistException;
 use OCA\Files_FromMail\Exceptions\AddressInfoException;
 use OCA\Files_FromMail\Exceptions\InvalidAddressException;
@@ -38,10 +42,16 @@ use OCP\Files\Folder;
 use OCP\Files\GenericFileException;
 use OCP\Files\NotFoundException;
 use OCP\Files\NotPermittedException;
+use OCP\Lock\LockedException;
 use PhpMimeMailParser\Attachment;
 use PhpMimeMailParser\Parser;
 
 
+/**
+ * Class MailService
+ *
+ * @package OCA\Files_FromMail\Service
+ */
 class MailService {
 
 
@@ -53,6 +63,7 @@ class MailService {
 
 	/** @var int */
 	private $count = 0;
+
 
 	/**
 	 * MailService constructor.
@@ -79,7 +90,7 @@ class MailService {
 	 * @param string $content
 	 * @param string $userId
 	 */
-	public function parseMail($content, $userId) {
+	public function parseMail(string $content, string $userId): void {
 		$mail = new Parser();
 		$mail->setText($content);
 
@@ -116,10 +127,15 @@ class MailService {
 	 * @throws NotAFolderException
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
+	 * @throws LockedException
 	 */
-	private function generateLocalContentFromMail(Parser $mail, $to, $data) {
-
+	private function generateLocalContentFromMail(Parser $mail, string $to, array $data): void {
 		$toInfo = $this->getMailAddressInfo($to);
+		$this->miscService->log($to . ' ' . json_encode($toInfo));
+		if (empty($toInfo)) {
+			return;
+		}
+
 		$text = $data['text'];
 		$subject = $data['subject'];
 		$from = $data['from'];
@@ -136,13 +152,12 @@ class MailService {
 
 
 	/**
-	 * @param $content
-	 * @param $toInfo
+	 * @param string $content
+	 * @param array $toInfo
 	 *
 	 * @throws AddressInfoException
 	 */
-	private function verifyInfoAndPassword($content, $toInfo) {
-
+	private function verifyInfoAndPassword(string $content, array $toInfo): void {
 		if ($toInfo === null) {
 			throw new AddressInfoException('address is not known');
 		}
@@ -169,9 +184,8 @@ class MailService {
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
 	 */
-	private function getMailFolder($userId, $to, $from) {
-
-		$node = \OC::$server->getUserFolder($userId);
+	private function getMailFolder(string $userId, string $to, string $from): Folder {
+		$node = OC::$server->getUserFolder($userId);
 		$folderPath = 'Mails sent to ' . $to . '/From ' . $from . '/';
 
 		if (!$node->nodeExists($folderPath)) {
@@ -193,7 +207,7 @@ class MailService {
 	 *
 	 * @return array
 	 */
-	private function parseMailHeaders(Parser $mail) {
+	private function parseMailHeaders(Parser $mail): array {
 		$from = $mail->getAddresses('from')[0]['address'];
 		$subject = $mail->getHeader('subject');
 		$text = $mail->getHeadersRaw() . $mail->getMessageBody('text');
@@ -214,15 +228,15 @@ class MailService {
 	 *
 	 * @throws GenericFileException
 	 * @throws NotPermittedException
+	 * @throws LockedException
 	 */
-	private function createLocalFileFromAttachments($id, $folder, $attachments) {
+	private function createLocalFileFromAttachments(string $id, Folder $folder, array $attachments): void {
 		foreach ($attachments as $attachment) {
 			$this->createLocalFile(
 				$folder, $id, 'attachment-' . $attachment->getFilename(),
 				$attachment->getContent()
 			);
 		}
-
 	}
 
 
@@ -234,8 +248,9 @@ class MailService {
 	 *
 	 * @throws NotPermittedException
 	 * @throws GenericFileException
+	 * @throws LockedException
 	 */
-	private function createLocalFile($folder, $id, $filename, $content) {
+	private function createLocalFile(Folder $folder, string $id, string $filename, string $content): void {
 		$new = $folder->newFile($id . '-' . $this->count . '_' . $filename);
 		$new->putContent($content);
 
@@ -244,17 +259,14 @@ class MailService {
 
 
 	/**
-	 * @param $address
-	 * @param $password
+	 * @param string $address
+	 * @param string $password
 	 *
 	 * @throws UnknownAddressException
 	 */
-	public function setMailPassword($address, $password) {
+	public function setMailPassword(string $address, string $password): void {
 		if (!$this->mailAddressExist($address)) {
 			throw new UnknownAddressException('address is not known');
-		}
-		if ($password === null) {
-			$password = '';
 		}
 
 		$addresses = $this->getMailAddresses();
@@ -271,11 +283,11 @@ class MailService {
 
 
 	/**
-	 * @param $address
+	 * @param string $address
 	 *
 	 * @throws UnknownAddressException
 	 */
-	public function removeMailAddress($address) {
+	public function removeMailAddress(string $address): void {
 		$addresses = $this->getMailAddresses();
 		if (!$this->mailAddressExist($address)) {
 			throw new UnknownAddressException('address is not known');
@@ -293,19 +305,20 @@ class MailService {
 
 
 	/**
-	 * @param $address
+	 * @param string $address
+	 * @param string $password
 	 *
 	 * @throws AddressAlreadyExistException
 	 * @throws InvalidAddressException
 	 */
-	public function addMailAddress($address) {
+	public function addMailAddress(string $address, string $password = ''): void {
 		$this->hasToBeAValidMailAddress($address);
 		if ($this->mailAddressExist($address)) {
 			throw new AddressAlreadyExistException('address already exist');
 		}
 
 		$addresses = $this->getMailAddresses();
-		array_push($addresses, ['address' => $address]);
+		array_push($addresses, ['address' => $address, 'password' => $password]);
 		$this->saveMailAddresses($addresses);
 	}
 
@@ -315,17 +328,17 @@ class MailService {
 	 *
 	 * @return bool
 	 */
-	private function mailAddressExist($address) {
-		return ($this->getMailAddressInfo($address) !== null);
+	private function mailAddressExist(string $address): bool {
+		return !empty($this->getMailAddressInfo($address));
 	}
 
 
 	/**
-	 * @param $address
+	 * @param string $address
 	 *
-	 * @return array|null
+	 * @return array
 	 */
-	private function getMailAddressInfo($address) {
+	private function getMailAddressInfo(string $address): array {
 		$addresses = $this->getMailAddresses();
 		foreach ($addresses as $entry) {
 			if ($entry['address'] === $address) {
@@ -333,16 +346,16 @@ class MailService {
 			}
 		}
 
-		return null;
+		return [];
 	}
 
 
 	/**
-	 * @param $address
+	 * @param string $address
 	 *
 	 * @throws InvalidAddressException
 	 */
-	private function hasToBeAValidMailAddress($address) {
+	private function hasToBeAValidMailAddress(string $address): void {
 		if (filter_var($address, FILTER_VALIDATE_EMAIL)) {
 			return;
 		}
@@ -354,7 +367,7 @@ class MailService {
 	/**
 	 * @return array
 	 */
-	public function getMailAddresses() {
+	public function getMailAddresses(): array {
 		$curr = json_decode($this->configService->getAppValue(ConfigService::FROMMAIL_ADDRESSES), true);
 		if ($curr === null) {
 			return [];
@@ -363,12 +376,13 @@ class MailService {
 		return $curr;
 	}
 
+
 	/**
-	 * @param $addresses
+	 * @param array $addresses
 	 */
-	private function saveMailAddresses($addresses) {
+	private function saveMailAddresses(array $addresses): void {
 		$this->configService->setAppValue(ConfigService::FROMMAIL_ADDRESSES, json_encode($addresses));
 	}
 
-
 }
+

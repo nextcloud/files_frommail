@@ -1,4 +1,6 @@
-<?php
+<?php declare(strict_types=1);
+
+
 /**
  * Files_FromMail - Recover your email attachments from your cloud.
  *
@@ -46,11 +48,11 @@ class NextcloudMailCatcher {
 
 
 	/**
-	 * RemoteMailCatcher constructor.
+	 * NextcloudMailCatcher constructor.
 	 *
 	 * @param array $config
 	 */
-	public function __construct($config) {
+	public function __construct(array $config) {
 		$nextcloud = $config['nextcloud'];
 		if (substr($nextcloud, -1) === '/') {
 			$config['nextcloud'] = substr($nextcloud, 0, -1);
@@ -65,7 +67,7 @@ class NextcloudMailCatcher {
 	 *
 	 * @return $this
 	 */
-	public function setContent($content) {
+	public function setContent(string $content): self {
 		$this->content = $content;
 
 		return $this;
@@ -75,7 +77,7 @@ class NextcloudMailCatcher {
 	/**
 	 * @return string
 	 */
-	public function getContent() {
+	public function getContent(): string {
 		return $this->content;
 	}
 
@@ -83,8 +85,7 @@ class NextcloudMailCatcher {
 	/**
 	 *
 	 */
-	public function sendToNextcloud() {
-
+	public function sendToNextcloud(): void {
 		$content = rawurlencode(base64_encode($this->getContent()));
 
 		$curl = $this->generateAuthedCurl();
@@ -99,7 +100,7 @@ class NextcloudMailCatcher {
 	/**
 	 *
 	 */
-	public function test() {
+	public function test(): void {
 		$this->config['debug'] = true;
 		$this->debug('testing!');
 
@@ -126,7 +127,7 @@ class NextcloudMailCatcher {
 	 * @param resource $curl
 	 * @param string|array $result
 	 */
-	private function debugCurl($curl, $result) {
+	private function debugCurl($curl, $result): void {
 		if ($result === false) {
 			$this->debug('Mail NOT forwarded: ' . curl_error($curl));
 
@@ -201,7 +202,7 @@ class NextcloudMailCatcher {
 	 * @param resource $curl
 	 * @param string $put
 	 */
-	private function fillCurlWithContent(&$curl, $put) {
+	private function fillCurlWithContent(&$curl, string $put): void {
 
 		curl_setopt($curl, CURLOPT_CUSTOMREQUEST, 'PUT');
 		curl_setopt($curl, CURLOPT_POSTFIELDS, $put);
@@ -223,7 +224,7 @@ class NextcloudMailCatcher {
 	/**
 	 * @param string $string
 	 */
-	private function debug($string) {
+	private function debug(string $string): void {
 		if (!array_key_exists('debug', $this->config) || $this->config['debug'] !== true) {
 			return;
 		}

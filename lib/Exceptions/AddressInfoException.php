@@ -1,4 +1,6 @@
-<?php
+<?php declare(strict_types=1);
+
+
 /**
  * Files_FromMail - Recover your email attachments from your cloud.
  *
@@ -24,9 +26,13 @@
  *
  */
 
+
 namespace OCA\Files_FromMail\Exceptions;
 
-class AddressInfoException extends \Exception {
+use Exception;
+
+
+class AddressInfoException extends Exception {
 
 }
 

@@ -27,40 +27,46 @@
  */
 
 
-namespace OCA\Files_FromMail\Service;
+namespace OCA\Files_FromMail\Settings;
 
-use OCA\Files_FromMail\AppInfo\Application;
-use OCP\ILogger;
+
+use OCP\AppFramework\Http\TemplateResponse;
+use OCP\Settings\ISettings;
 
 
 /**
- * Class MiscService
+ * Class Admin
  *
- * @package OCA\Files_FromMail\Service
+ * @package OCA\Files_FromMail\Settings
  */
-class MiscService {
+class Admin implements ISettings {
 
 
-	/** @var ILogger */
-	private $logger;
-
-
-	public function __construct(ILogger $logger) {
-		$this->logger = $logger;
+	/**
+	 * @return TemplateResponse
+	 */
+	public function getForm() {
+		return new TemplateResponse('files_frommail', 'settings.admin', [], '');
 	}
 
 
 	/**
-	 * @param string $message
-	 * @param int $level
+	 * @return string the section ID, e.g. 'sharing'
 	 */
-	public function log(string $message, int $level = 2): void {
-		$data = array(
-			'app'   => Application::APP_NAME,
-			'level' => $level
-		);
+	public function getSection() {
+		return 'additional';
+	}
 
-		$this->logger->log($level, $message, $data);
+
+	/**
+	 * @return int whether the form should be rather on the top or bottom of
+	 * the admin section. The forms are arranged in ascending order of the
+	 * priority values. It is required to return a value between 0 and 100.
+	 *
+	 * E.g.: 70
+	 */
+	public function getPriority() {
+		return 80;
 	}
 
 }

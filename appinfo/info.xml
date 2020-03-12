@@ -11,7 +11,7 @@
 
 ]]>
 	</description>
-	<version>0.3.0</version>
+	<version>0.4.0</version>
 	<licence>agpl</licence>
 	<author>Maxence Lange</author>
 	<namespace>Files_FromMail</namespace>
@@ -27,8 +27,12 @@
 	<screenshot>https://raw.githubusercontent.com/nextcloud/files_frommail/master/screenshots/v0.1.0.png</screenshot>
 
 	<dependencies>
-		<nextcloud min-version="15" max-version="17"/>
+		<nextcloud min-version="18"/>
 	</dependencies>
+
+	<settings>
+		<admin>OCA\Files_FromMail\Settings\Admin</admin>
+	</settings>
 
 	<commands>
 		<command>OCA\Files_FromMail\Command\Addresses</command>
