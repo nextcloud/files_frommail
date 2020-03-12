@@ -9,8 +9,8 @@ package_name=$(app_name)
 cert_dir=$(HOME)/.nextcloud/certificates
 codecov_token_dir=$(HOME)/.nextcloud/codecov_token
 github_account=nextcloud
-branch=master
-version+=0.3.0
+branch=stable15
+version+=0.3.1
 
 all: appstore
 
