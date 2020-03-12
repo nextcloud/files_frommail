@@ -186,6 +186,9 @@ class MailService {
 	 */
 	private function getMailFolder(string $userId, string $to, string $from): Folder {
 		$node = OC::$server->getUserFolder($userId);
+		$to = $this->parseMailAddress($to);
+		$from = $this->parseMailAddress($from);
+
 		$folderPath = 'Mails sent to ' . $to . '/From ' . $from . '/';
 
 		if (!$node->nodeExists($folderPath)) {
@@ -382,6 +385,28 @@ class MailService {
 	 */
 	private function saveMailAddresses(array $addresses): void {
 		$this->configService->setAppValue(ConfigService::FROMMAIL_ADDRESSES, json_encode($addresses));
+	}
+
+
+	/**
+	 * @param string $address
+	 *
+	 * @return string
+	 */
+	private function parseMailAddress(string $address): string {
+		$acceptedChars = 'qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM0123456789@.-_+';
+
+		$fixed = '';
+		for ($i = 0; $i < strlen($address); $i++) {
+			$c = $address[$i];
+			if (strpos($acceptedChars, $c) !== false) {
+				$fixed .= $c;
+			}
+		}
+
+		$fixed = str_replace('..', '.', $fixed);
+
+		return $fixed;
 	}
 
 }
